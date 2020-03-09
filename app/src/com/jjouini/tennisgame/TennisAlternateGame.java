@@ -48,6 +48,7 @@ public class TennisAlternateGame {
             // Add Game result to the global score
             firstPlayerScore += firstPlayerGame;
             secondPlayerScore += secondPlayerGame;
+
         }
 
     }
@@ -58,27 +59,28 @@ public class TennisAlternateGame {
      * @return boolean
      */
     private static boolean isGameFinished() {
+
         // Game is finished
         if (isGameWon()) {
-            System.out.println((String.format("***** %s wins the game! *****", getWinningPlayerName())));
+            System.out.println((String.format("Final Score -> ***** %s wins the game! *****\r\n", getWinningPlayerName())));
             return true;
         }
 
         if (isGameAdvantage()) {
-            System.out.println((String.format("***** Advantage for %s! *****", getWinningPlayerName())));
+            System.out.println((String.format("Final Score -> ***** Advantage for %s! *****\r\n", getWinningPlayerName())));
             return true;
         }
 
         if (isGameDeuce()) {
-            System.out.println("***** Deuce! *****");
+            System.out.println("Final Score -> ***** Deuce! *****\r\n");
             return true;
         }
 
         // Game is still in progress...
         if (firstPlayerScore == secondPlayerScore) {
-            System.out.println((String.format("***** %s All *****", scoreMap.get(firstPlayerScore))));
+            System.out.println((String.format("Live Score -> ***** %s All *****\r\n", scoreMap.get(firstPlayerScore))));
         } else {
-            System.out.println(String.format("\"%s\": %s ***** \"%s\": %s", firstPlayerName, scoreMap.get(firstPlayerScore), secondPlayerName, scoreMap.get(secondPlayerScore)));
+            System.out.println(String.format("Live Score -> \"%s\": %s ***** \"%s\": %s\r\n", firstPlayerName, scoreMap.get(firstPlayerScore), secondPlayerName, scoreMap.get(secondPlayerScore)));
         }
         return false;
     }
