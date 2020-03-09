@@ -6,83 +6,113 @@ import static com.jjouini.tennisgame.TennisGame.SCORE_ENUM.translateScore;
 
 public class TennisGame {
 
-
-    private static String playerOneName;
-    private static String playerTwoName;
-    private static int playerOneScore = 0;
-    private static int playerTwoScore = 0;
+    private static String firstPlayerName;
+    private static String secondPlayerName;
+    private static int firstPlayerScore = 0;
+    private static int secondPlayerScore = 0;
 
     public static void main(String[] args) {
 
         // Init the game and read player names
         Scanner sc = new Scanner(System.in);
         System.out.println("Please insert first player's name:");
-        playerOneName = sc.nextLine();
+        firstPlayerName = sc.nextLine();
         System.out.println("Please insert second player's name:");
-        playerTwoName = sc.nextLine();
+        secondPlayerName = sc.nextLine();
 
         // Iterate to get the game of each player
         while (!isGameFinished()) {
 
             // Player scores if input=1 or misses if input=0
-            int playerOneHit;
+            int firstPlayerGame;
             do {
-                System.out.println("Game for " + playerOneName + ":");
-                playerOneHit = sc.nextInt();
-            } while (playerOneHit != 0 && playerOneHit != 1);
+                System.out.println(String.format("-> Game for %s:", firstPlayerName));
+                firstPlayerGame = sc.nextInt();
+            } while (firstPlayerGame != 0 && firstPlayerGame != 1);
 
-            int playerTwoHit;
+            int secondPlayerGame;
             do {
-                System.out.println("Game for " + playerTwoName + ":");
-                playerTwoHit = sc.nextInt();
-            } while (playerTwoHit != 0 && playerTwoHit != 1);
+                System.out.println(String.format("-> Game for %s:", secondPlayerName));
+                secondPlayerGame = sc.nextInt();
+            } while (secondPlayerGame != 0 && secondPlayerGame != 1);
 
-            playerOneScore += playerOneHit;
-            playerTwoScore += playerTwoHit;
+            // Add Game result to the global score
+            firstPlayerScore += firstPlayerGame;
+            secondPlayerScore += secondPlayerGame;
         }
 
     }
 
+    /**
+     * Game is finished if One player wins or is in advantage or the game is draw
+     *
+     * @return boolean
+     */
     private static boolean isGameFinished() {
-        if (hasWinner()) {
-            System.out.println(playerWithHighestScore() + " wins!");
+        // Game is finished
+        if (isGameWon()) {
+            System.out.println((String.format("***** %s wins the game! *****", getWinningPlayerName())));
             return true;
         }
 
-        if (hasAdvantage()) {
-            System.out.println("Advantage " + playerWithHighestScore());
+        if (isGameAdvantage()) {
+            System.out.println((String.format("***** Advantage for %s! *****", getWinningPlayerName())));
             return true;
         }
 
-        if (isDeuce()) {
-            System.out.println("Deuce");
+        if (isGameDeuce()) {
+            System.out.println("***** Deuce! *****");
             return true;
         }
 
-        if (playerOneScore == playerTwoScore) {
-            System.out.println(translateScore(playerOneScore) + " all");
+        // Game is still in progress...
+        if (firstPlayerScore == secondPlayerScore) {
+            System.out.println((String.format("***** %s All *****", translateScore(firstPlayerScore))));
         } else {
-            System.out.println(translateScore(playerOneScore) + "," + translateScore(playerTwoScore));
+            System.out.println(String.format("\"%s\": %s ***** \"%s\": %s", firstPlayerName, translateScore(firstPlayerScore), secondPlayerName, translateScore(secondPlayerScore)));
         }
         return false;
     }
 
-    private static String playerWithHighestScore() {
-        if (playerOneScore > playerTwoScore)
-            return playerOneName;
-        return playerTwoName;
+    private static boolean isGameWon() {
+        return (hasOnePlayerScoredMaxPoints()) && getScoresAbsDifference() >= 2;
     }
 
-    private static boolean hasWinner() {
-        return (playerTwoScore >= 4 || playerOneScore >= 4) && (Math.abs(playerOneScore - playerTwoScore)) >= 2;
+    private static boolean isGameAdvantage() {
+        return hasOnePlayerScoredMaxPoints() && (getScoresAbsDifference()) == 1;
     }
 
-    private static boolean hasAdvantage() {
-        return (playerTwoScore >= 4 || playerOneScore >= 4) && (Math.abs(playerOneScore - playerTwoScore)) == 1;
+    private static boolean isGameDeuce() {
+        return firstPlayerScore >= 3 && secondPlayerScore == firstPlayerScore;
     }
 
-    private static boolean isDeuce() {
-        return playerOneScore >= 3 && playerTwoScore == playerOneScore;
+    /**
+     * Returns true if at least one of the two players scored 4 points
+     *
+     * @return boolean
+     */
+    private static boolean hasOnePlayerScoredMaxPoints() {
+        return secondPlayerScore >= 4 || firstPlayerScore >= 4;
+    }
+
+    /**
+     * returns the Absolute value of the difference between the scores of the two players
+     *
+     * @return int
+     */
+    private static int getScoresAbsDifference() {
+        return Math.abs(firstPlayerScore - secondPlayerScore);
+    }
+
+    /**
+     * Returns the name of the player that scored the most
+     *
+     * @return String
+     */
+    private static String getWinningPlayerName() {
+        if (firstPlayerScore > secondPlayerScore)
+            return firstPlayerName;
+        return secondPlayerName;
     }
 
     public enum SCORE_ENUM {
