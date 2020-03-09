@@ -26,13 +26,13 @@ public class TennisGame {
             // Player scores if input=1 or misses if input=0
             int firstPlayerGame;
             do {
-                System.out.println(String.format("-> Game for %s:", firstPlayerName));
+                System.out.println(String.format("-> Game for %s (press 1 to score a point / 0 to miss):", firstPlayerName));
                 firstPlayerGame = sc.nextInt();
             } while (firstPlayerGame != 0 && firstPlayerGame != 1);
 
             int secondPlayerGame;
             do {
-                System.out.println(String.format("-> Game for %s:", secondPlayerName));
+                System.out.println(String.format("-> Game for %s (press 1 to score a point / 0 to miss):", secondPlayerName));
                 secondPlayerGame = sc.nextInt();
             } while (secondPlayerGame != 0 && secondPlayerGame != 1);
 
